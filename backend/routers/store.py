@@ -29,7 +29,7 @@ async def list_products(
         idx += 1
 
     if tag:
-        query += f" AND ${ idx } = ANY(tags)"
+        query += f" AND ${idx} = ANY(tags)"
         params.append(tag)
         idx += 1
 

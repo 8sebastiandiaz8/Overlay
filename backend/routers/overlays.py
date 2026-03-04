@@ -1,6 +1,5 @@
 import json
 import secrets
-from uuid import UUID
 
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
@@ -140,3 +139,27 @@ async def delete_overlay(overlay_id: str, request: Request):
         overlay_id, user_id,
     )
     return {"status": "deleted"}
+
+
+@router.get("/public/{token}")
+async def get_public_overlay(token: str):
+    """Get overlay data by public URL token (used by OBS Browser Source)."""
+    pool = await get_pool()
+    if not pool:
+        return JSONResponse({"error": "Database unavailable"}, status_code=503)
+
+    row = await pool.fetchrow(
+        """SELECT id, user_id, widgets_config, resolution_w, resolution_h
+           FROM overlays WHERE public_url_token = $1""",
+        token,
+    )
+    if not row:
+        return JSONResponse({"error": "Overlay not found"}, status_code=404)
+
+    return {
+        "id": str(row["id"]),
+        "user_id": str(row["user_id"]),
+        "widgets_config": json.loads(row["widgets_config"]) if isinstance(row["widgets_config"], str) else row["widgets_config"],
+        "resolution_w": row["resolution_w"],
+        "resolution_h": row["resolution_h"],
+    }

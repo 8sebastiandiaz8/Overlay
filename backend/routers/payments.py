@@ -1,5 +1,3 @@
-import os
-
 import stripe
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
