@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — OverlayForge{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="/static/css/dashboard.css">{% endblock %}
+
+{% block content %}
+<section class="dashboard">
+    <div class="dashboard-header">
+        <h2>My Overlays</h2>
+        <button class="btn btn-primary" id="create-overlay-btn">+ New Overlay</button>
+    </div>
+
+    <div class="overlays-grid" id="overlays-grid">
+        <p class="loading-text">Loading your overlays...</p>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    const grid = document.getElementById('overlays-grid');
+    const createBtn = document.getElementById('create-overlay-btn');
+
+    // Load overlays
+    try {
+        const res = await fetch('/api/overlays/');
+        const data = await res.json();
+        if (data.overlays && data.overlays.length > 0) {
+            grid.innerHTML = data.overlays.map(o => `
+                <div class="overlay-card">
+                    <h3>${o.name}</h3>
+                    <p>${o.resolution_w}x${o.resolution_h}</p>
+                    <div class="overlay-actions">
+                        <a href="/editor/${o.id}" class="btn btn-sm">Edit</a>
+                        <button class="btn btn-sm btn-secondary copy-url-btn"
+                                data-url="${window.location.origin}/overlay/${o.public_url_token}">
+                            Copy OBS URL
+                        </button>
+                        <button class="btn btn-sm btn-danger delete-overlay-btn" data-id="${o.id}">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            grid.innerHTML = '<p>No overlays yet. Create your first one!</p>';
+        }
+    } catch {
+        grid.innerHTML = '<p>Could not load overlays.</p>';
+    }
+
+    // Create overlay
+    createBtn.addEventListener('click', async () => {
+        const name = prompt('Overlay name:', 'My Overlay');
+        if (!name) return;
+        const res = await fetch('/api/overlays/', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({name}),
+        });
+        const data = await res.json();
+        if (data.id) window.location.href = `/editor/${data.id}`;
+    });
+
+    // Delegate events
+    grid.addEventListener('click', async (e) => {
+        if (e.target.classList.contains('copy-url-btn')) {
+            const url = e.target.dataset.url;
+            await navigator.clipboard.writeText(url);
+            e.target.textContent = 'Copied!';
+            setTimeout(() => e.target.textContent = 'Copy OBS URL', 2000);
+        }
+        if (e.target.classList.contains('delete-overlay-btn')) {
+            if (!confirm('Delete this overlay?')) return;
+            await fetch(`/api/overlays/${e.target.dataset.id}`, {method: 'DELETE'});
+            window.location.reload();
+        }
+    });
+});
+</script>
+{% endblock %}

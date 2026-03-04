@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}OverlayForge — Custom Overlays for Streamers{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="/static/css/dashboard.css">{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>🎮 OverlayForge</h1>
+    <p class="hero-subtitle">Create stunning overlays and widgets for your live streams — 100% free to start.</p>
+    <div class="hero-features">
+        <div class="feature-card">
+            <h3>🎨 Visual Editor</h3>
+            <p>Drag &amp; drop editor to design your overlays with ease.</p>
+        </div>
+        <div class="feature-card">
+            <h3>⚡ Real-Time Events</h3>
+            <p>React to follows, subs, and donations instantly on your stream.</p>
+        </div>
+        <div class="feature-card">
+            <h3>🛒 Widget Store</h3>
+            <p>Browse and install community-made widgets and overlay packs.</p>
+        </div>
+    </div>
+    <div class="hero-cta">
+        <a href="/login" class="btn btn-primary btn-lg">Get Started Free</a>
+    </div>
+</section>
+{% endblock %}

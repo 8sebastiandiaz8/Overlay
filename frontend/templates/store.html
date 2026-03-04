@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Store — OverlayForge{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="/static/css/store.css">{% endblock %}
+
+{% block content %}
+<section class="store-section">
+    <h2>Widget &amp; Overlay Store</h2>
+    <div class="store-filters">
+        <button class="filter-btn active" data-type="">All</button>
+        <button class="filter-btn" data-type="widget">Widgets</button>
+        <button class="filter-btn" data-type="overlay_pack">Overlay Packs</button>
+        <button class="filter-btn" data-type="theme">Themes</button>
+    </div>
+    <div class="products-grid" id="products-grid">
+        <p class="loading-text">Loading products...</p>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/store.js"></script>
+{% endblock %}

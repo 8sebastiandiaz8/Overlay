@@ -1,0 +1,41 @@
+/* Dashboard */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.overlays-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.overlay-card {
+    background: var(--bg-card);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    transition: transform 0.2s;
+}
+
+.overlay-card:hover {
+    transform: translateY(-2px);
+}
+
+.overlay-card h3 {
+    margin-bottom: 0.5rem;
+}
+
+.overlay-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.overlay-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Login — OverlayForge{% endblock %}
+
+{% block content %}
+<section class="login-section">
+    <h2>Connect Your Streaming Account</h2>
+    <p>Login with your streaming platform to get started.</p>
+    <div class="login-buttons">
+        <a href="/auth/twitch" class="btn btn-twitch">
+            <span class="btn-icon">📺</span> Login with Twitch
+        </a>
+        <a href="/auth/kick" class="btn btn-kick">
+            <span class="btn-icon">🟢</span> Login with Kick
+        </a>
+    </div>
+</section>
+{% endblock %}
