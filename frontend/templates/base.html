@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}OverlayForge{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/base.css">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">🎮 OverlayForge</a>
+        <div class="navbar-links">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/store">Store</a>
+            <span id="user-info"></span>
+        </div>
+    </nav>
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+    <script src="/static/js/auth.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

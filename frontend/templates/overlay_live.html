@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overlay</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            overflow: hidden;
+        }
+        .widget-container {
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div id="overlay-root"></div>
+
+    <script src="/static/js/websocket.js"></script>
+    <script>
+        const overlayToken = '{{ token }}';
+
+        // Load overlay widgets via public token
+        async function loadOverlay() {
+            try {
+                const res = await fetch(`/api/overlays/public/${overlayToken}`);
+                const data = await res.json();
+                if (data.widgets_config) {
+                    renderWidgets(data.widgets_config);
+                }
+                if (data.user_id) {
+                    const socket = new OverlaySocket(data.user_id);
+                    socket
+                        .on('follow', (d) => triggerAlert('follow', d))
+                        .on('subscription', (d) => triggerAlert('subscription', d))
+                        .on('donation', (d) => triggerAlert('donation', d))
+                        .on('chat_message', (d) => addChatMessage(d));
+                }
+            } catch (err) {
+                console.error('Failed to load overlay:', err);
+            }
+        }
+
+        function renderWidgets(widgets) {
+            const root = document.getElementById('overlay-root');
+            widgets.forEach(w => {
+                const el = document.createElement('div');
+                el.className = 'widget-container';
+                el.style.left = (w.position_x || 0) + 'px';
+                el.style.top = (w.position_y || 0) + 'px';
+                el.style.width = (w.width || 300) + 'px';
+                el.style.height = (w.height || 200) + 'px';
+                el.style.zIndex = w.z_index || 1;
+                el.dataset.type = w.widget_type || 'unknown';
+                el.innerHTML = `<iframe src="/static/widgets/${w.widget_type}/widget.html"
+                                        style="width:100%;height:100%;border:none;background:transparent;"
+                                        allowtransparency="true"></iframe>`;
+                root.appendChild(el);
+            });
+        }
+
+        function triggerAlert(type, data) {
+            console.log('Alert:', type, data);
+        }
+
+        function addChatMessage(data) {
+            console.log('Chat:', data);
+        }
+
+        loadOverlay();
+    </script>
+</body>
+</html>

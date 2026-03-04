@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Editor — OverlayForge{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="/static/css/editor.css">{% endblock %}
+
+{% block content %}
+<section class="editor-section">
+    <div class="editor-toolbar">
+        <input type="text" id="overlay-name" class="overlay-name-input" placeholder="Overlay Name">
+        <div class="toolbar-actions">
+            <select id="add-widget-select">
+                <option value="">+ Add Widget</option>
+                <option value="alert-box">Alert Box</option>
+                <option value="chat-box">Chat Box</option>
+                <option value="goal-bar">Goal Bar</option>
+                <option value="follower-alert">Follower Alert</option>
+            </select>
+            <button class="btn btn-primary" id="save-btn">Save</button>
+            <button class="btn btn-secondary" id="preview-btn">Preview URL</button>
+        </div>
+    </div>
+    <div class="editor-canvas" id="editor-canvas">
+        <!-- Widgets are rendered here -->
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/editor.js"></script>
+<script>
+    const overlayId = '{{ overlay_id }}';
+</script>
+{% endblock %}
